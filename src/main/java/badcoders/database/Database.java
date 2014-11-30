@@ -3,6 +3,7 @@ package badcoders.database;
 import badcoders.model.Account;
 import badcoders.model.Comment;
 import badcoders.model.Film;
+import badcoders.model.FilmStats;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -122,18 +123,36 @@ public class Database {
         }
     }
 
+    public FilmStats getFilmStats(long id) throws SQLException {
+        try (Connection connection = createConnection()) {
+            final String query = "SELECT AVG(score) AS mean_score, COUNT(*) AS vote_count FROM film_score WHERE film_id = ?;";
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setLong(1, id);
+                ResultSet dbResult = stmt.executeQuery();
+                if (dbResult.isAfterLast()) {
+                    return null;
+                }
+
+                FilmStats result = new FilmStats();
+                result.mean_score = dbResult.getDouble("mean_score");
+                result.vote_count = dbResult.getLong("vote_count");
+                return result;
+            }
+        }
+    }
+
     /**
      * @return list of all films.
      */
     public List<Film> getFilms() throws SQLException {
         try (Connection connection = createConnection()) {
             try (Statement stmt = connection.createStatement()) {
-                // TODO: implement getting stats
                 final String query = "SELECT * FROM film";
                 ResultSet dbResult = stmt.executeQuery(query);
 
                 ArrayList<Film> result = new ArrayList<>();
                 while (dbResult.next()) {
+                    FilmStats stats = getFilmStats(dbResult.getLong("id"));
                     result.add(new Film(
                             dbResult.getLong("id"),
                             dbResult.getString("name"),
@@ -141,8 +160,8 @@ public class Database {
                             dbResult.getString("actors"),
                             dbResult.getString("genre"),
                             dbResult.getString("description"),
-                            0,
-                            0
+                            stats.mean_score,
+                            stats.vote_count
                     ));
                 }
 
@@ -179,6 +198,7 @@ public class Database {
                     return null;
                 }
 
+                FilmStats stats = getFilmStats(dbResult.getLong("id"));
                 return new Film(
                         dbResult.getLong("id"),
                         dbResult.getString("name"),
@@ -186,8 +206,8 @@ public class Database {
                         dbResult.getString("actors"),
                         dbResult.getString("genre"),
                         dbResult.getString("description"),
-                        0,
-                        0
+                        stats.mean_score,
+                        stats.vote_count
                 );
             }
         }
