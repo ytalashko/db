@@ -3,9 +3,9 @@ package badcoders.database;
 import badcoders.model.Account;
 import badcoders.model.Comment;
 import badcoders.model.Film;
-import badcoders.model.FilmScore;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
@@ -19,7 +19,6 @@ public class Database {
             "actors text NOT NULL," +
             "genre tinytext NOT NULL," +
             "description text NOT NULL," +
-            "total_score tinyint(4) NOT NULL," +
             "PRIMARY KEY (id));";
 
     private final static String commentSchema = "comment (" +
@@ -114,30 +113,53 @@ public class Database {
     }
 
     /**
-     * @retval gets user by id.
+     * @return gets user by id.
      */
     public Account getUser(long id) {
         return null;
     }
 
     /**
-     * @retval list of all films.
+     * @return list of all films.
      */
-    public List<Film> getFilms() {
-        return null;
+    public List<Film> getFilms() throws SQLException {
+        Connection connection = createConnection();
+        Statement stmt = connection.createStatement();
+        final String query = "SELECT * FROM film";
+        ResultSet dbResult = stmt.executeQuery(query);
+
+        ArrayList<Film> result = new ArrayList<>();
+        while (dbResult.next()) {
+            result.add(new Film(
+                    dbResult.getLong("id"),
+                    dbResult.getString("name"),
+                    dbResult.getString("director"),
+                    dbResult.getString("actors"),
+                    dbResult.getString("genre"),
+                    dbResult.getString("description"),
+                    0,
+                    0
+                    ));
+        }
+
+        return result;
     }
 
-    /**
-     * @retval film by id.
-     */
-    public Film getFilm(String id) {
-        return null;
+    public void addFilm(Film film) throws SQLException {
+        Connection connection = createConnection();
+        final String query = "INSERT INTO film(name, director, actors, genre, description) VALUES(?, ?, ?, ?, ?)";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setString(1, film.getName());
+        stmt.setString(2, film.getDirector());
+        stmt.setString(3, film.getActors());
+        stmt.setString(4, film.getGenre());
+        stmt.setString(5, film.getDescription());
+        stmt.execute();
+        stmt.close();
+        connection.close();
     }
 
-    /**
-     * @retval list of all film scores.
-     */
-    public List<FilmScore> getFilmScores() {
+    public Film getFilm(long id) {
         return null;
     }
 
@@ -182,11 +204,4 @@ public class Database {
         }
     }
 
-    public static void main(String[] args) throws SQLException {
-        Database db = new Database("test");
-        db.createModel();
-        db.addUser("rasen", "secret", true, "rasen.dubi@gmail.com");
-        System.out.println(db.getUser("rasen", "secret"));
-        System.out.println(db.getUser("rasen", "hack"));
-    }
 }
