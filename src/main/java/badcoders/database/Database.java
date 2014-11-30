@@ -13,49 +13,43 @@ public class Database {
     private final String name;
 
     public static final String filmSchema = "film (" +
-            "id ROWID," +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name tinytext NOT NULL," +
             "director tinytext NOT NULL," +
             "actors text NOT NULL," +
             "genre tinytext NOT NULL," +
-            "description text NOT NULL," +
-            "PRIMARY KEY (id));";
+            "description text NOT NULL);";
 
     private final static String commentSchema = "comment (" +
-            "id ROWID," +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "user_id int(11) NOT NULL," +
             "film_id int(11) NOT NULL," +
-            "text text NOT NULL," +
-            "PRIMARY KEY (id));";
+            "text text NOT NULL);";
 
     private final static String filmScoreSchema = "film_score (" +
-            "id ROWID," +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "film_id int(11) NOT NULL," +
             "user_id int(11) NOT NULL," +
-            "score tinyint(4) NOT NULL," +
-            "PRIMARY KEY (`id`));";
+            "score tinyint(4) NOT NULL);";
 
     private final static String recommendationSchema = "recommendation (" +
-            "id ROWID," +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "user_id int(11) NOT NULL," +
             "film_id int(11) NOT NULL," +
-            "score tinyint(4) NOT NULL," +
-            "PRIMARY KEY (id));";
+            "score tinyint(4) NOT NULL);";
 
     private final static String registrationSchema = "registration (" +
-            "id ROWID," +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "user_id int(11) NOT NULL," +
-            "code bigint(20) NOT NULL UNIQUE," +
-            "PRIMARY KEY (id));";
+            "code bigint(20) NOT NULL UNIQUE);";
 
     private final static String userSchema = "user (" +
-            "id ROWID," +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "login tinytext NOT NULL," +
             "password tinytext NOT NULL," +
             "email tinytext NOT NULL," +
             "date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP," +
-            "is_admin BOOL," +
-            "PRIMARY KEY (id));";
+            "is_admin BOOL);";
 
     public static final String[] SCHEMAS = new String[]{
             commentSchema,
@@ -71,13 +65,10 @@ public class Database {
     }
 
     public void createModel() throws SQLException {
-        Connection connection = createConnection();
-        try {
+        try (Connection connection = createConnection()) {
             for (String schema : SCHEMAS) {
                 createTable(connection, schema);
             }
-        } finally {
-            connection.close();
         }
     }
 
@@ -159,8 +150,27 @@ public class Database {
         connection.close();
     }
 
-    public Film getFilm(long id) {
-        return null;
+    public Film getFilm(long id) throws SQLException {
+        Connection connection = createConnection();
+        final String query = "SELECT * FROM film WHERE id = ?";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setLong(1, id);
+        ResultSet dbResult = stmt.executeQuery();
+
+        if (dbResult.isAfterLast()) {
+            return null;
+        } else {
+            return new Film(
+                    dbResult.getLong("id"),
+                    dbResult.getString("name"),
+                    dbResult.getString("director"),
+                    dbResult.getString("actors"),
+                    dbResult.getString("genre"),
+                    dbResult.getString("description"),
+                    0,
+                    0
+            );
+        }
     }
 
     /**

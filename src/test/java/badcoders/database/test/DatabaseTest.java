@@ -3,9 +3,9 @@ package badcoders.database.test;
 import badcoders.database.Database;
 import badcoders.model.Account;
 import badcoders.model.Film;
-import junit.framework.TestCase;
-
-import static junit.framework.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -13,23 +13,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DatabaseTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class DatabaseTest {
 
     Database db;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws SQLException {
         db = new Database("test");
         db.createModel();
     }
 
-    @Override
-    public void tearDown() throws Exception {
+    @After
+    public void tearDown() {
         new File("test.sdb").delete();
-        super.tearDown();
     }
 
+    @Test
     public void testUser() throws SQLException {
         db.addUser("rasen", "secret", true, "rasen.dubi@gmail.com");
 
@@ -37,6 +39,7 @@ public class DatabaseTest extends TestCase {
         assertEquals(null, db.getUser("rasen", "hack"));
     }
 
+    @Test
     public void testFilm() throws SQLException {
         assertEquals(Collections.emptyList(), db.getFilms());
 
@@ -54,6 +57,10 @@ public class DatabaseTest extends TestCase {
             assertTrue("Doesn't contain " + film, result.contains(film));
         }
         assertEquals(films.size(), result.size());
+
+        for (Film film : result) {
+            assertEquals(film, db.getFilm(film.getId()));
+        }
     }
 
 }

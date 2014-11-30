@@ -30,6 +30,10 @@ public class Film {
         this(0, name, director, actors, genre, description, 0, 0);
     }
 
+    public long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
