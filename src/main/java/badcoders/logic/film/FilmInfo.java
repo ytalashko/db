@@ -7,9 +7,9 @@ public class FilmInfo {
 
     public final String name;
     public final double score;
-    public final int numberOfVotes;
+    public final long numberOfVotes;
 
-    public FilmInfo(String name, double score, int numberOfVotes) {
+    public FilmInfo(String name, double score, long numberOfVotes) {
         this.name = name;
         this.score = score;
         this.numberOfVotes = numberOfVotes;
@@ -23,7 +23,7 @@ public class FilmInfo {
         return name;
     }
 
-    public int getNumberOfVotes() {
+    public long getNumberOfVotes() {
         return numberOfVotes;
     }
 
@@ -50,7 +50,8 @@ public class FilmInfo {
         result = name.hashCode();
         temp = Double.doubleToLongBits(score);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + numberOfVotes;
+        temp = Double.doubleToLongBits(numberOfVotes);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 

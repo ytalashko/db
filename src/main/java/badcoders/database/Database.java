@@ -188,7 +188,6 @@ public class Database {
 
     public Film getFilm(long id) throws SQLException {
         try (Connection connection = createConnection()) {
-            // TODO: implement getting stats
             final String query = "SELECT * FROM film WHERE id = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setLong(1, id);
