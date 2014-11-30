@@ -14,7 +14,7 @@ import java.util.List;
 public class FilmService {
 
     public static List<FilmInfo> getFilmsInfo(List<Film> films) throws SQLException {
-        List<FilmInfo> filmInfos = new ArrayList<FilmInfo>(films.size());
+        List<FilmInfo> filmInfos = new ArrayList<>(films.size());
         for (Film film : films) {
             filmInfos.add(new FilmInfo(film.getName(),
                     getFilmScore(Utils.getDatabase().getFilmScores()),

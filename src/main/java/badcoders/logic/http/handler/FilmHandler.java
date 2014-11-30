@@ -14,6 +14,7 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -41,6 +42,23 @@ public class FilmHandler extends AbstractAuthHandler {
             List<Film> films = db.getFilms();
             List<FilmInfo> filmInfos = FilmService.getFilmsInfo(films);
             responder.sendJson(HttpResponseStatus.OK, filmInfos, new TypeToken<List<FilmInfo>>() { }.getType());
+        } catch (SQLException e) {
+            responder.sendString(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Unable to read data from the database");
+        }
+    }
+
+    @GET
+    @Path("/{film-id}")
+    public void getFilm(HttpRequest request, HttpResponder responder, @PathParam("film-id") String filmId) {
+        Account account = getAndAuthenticateAccount(request, responder);
+        if (account == null) {
+            return;
+        }
+
+        try {
+            Database db = Utils.getDatabase();
+            Film film = db.getFilm(filmId);
+            responder.sendJson(HttpResponseStatus.OK, film, Film.class);
         } catch (SQLException e) {
             responder.sendString(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Unable to read data from the database");
         }

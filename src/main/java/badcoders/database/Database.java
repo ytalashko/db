@@ -120,6 +120,13 @@ public class Database {
     }
 
     /**
+     * @retval film by id.
+     */
+    public Film getFilm(String id) {
+        return null;
+    }
+
+    /**
      * @retval list of all film scores.
      */
     public List<FilmScore> getFilmScores() {
