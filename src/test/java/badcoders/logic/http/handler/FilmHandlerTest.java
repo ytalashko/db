@@ -16,14 +16,13 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.InputStreamReader;
 import java.io.File;
 import java.io.Reader;
+import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +31,21 @@ import java.util.List;
  */
 public class FilmHandlerTest {
 
-    private static String BASE;
+    private static final String DATABASE_NAME = "film_handler_test";
 
+    private static String BASE;
     private static HandlerServer HANDLER_SERVER;
     private static Database DATABASE;
+
+    @BeforeClass
+    public static void mockDatabaseName() throws IllegalAccessException, NoSuchFieldException, SQLException {
+        Database database = new Database(DATABASE_NAME);
+        database.createModel();
+
+        Field field = Utils.class.getDeclaredField("DATABASE");
+        field.setAccessible(true);
+        field.set(null, database);
+    }
 
     @Before
     public void initialize() throws Exception {
@@ -51,7 +61,7 @@ public class FilmHandlerTest {
     @After
     public void shutDown() throws Exception {
         HANDLER_SERVER.stopAndWait();
-        new File(String.format("%s.sdb", Constants.DATABASE_NAME)).delete();
+        new File(String.format("%s.sdb", DATABASE_NAME)).delete();
     }
 
     @Test
