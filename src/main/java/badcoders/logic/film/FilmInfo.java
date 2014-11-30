@@ -26,4 +26,40 @@ public class FilmInfo {
     public int getNumberOfVotes() {
         return numberOfVotes;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        FilmInfo filmInfo = (FilmInfo) o;
+
+        return numberOfVotes == filmInfo.numberOfVotes &&
+                Double.compare(filmInfo.score, score) == 0 && name.equals(filmInfo.name);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = name.hashCode();
+        temp = Double.doubleToLongBits(score);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + numberOfVotes;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "FilmInfo{" +
+                "name='" + name + '\'' +
+                ", score=" + score +
+                ", numberOfVotes=" + numberOfVotes +
+                '}';
+    }
 }
