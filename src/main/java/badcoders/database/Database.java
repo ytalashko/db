@@ -1,8 +1,11 @@
 package badcoders.database;
 
-import badcoders.logic.account.Account;
+import badcoders.model.Account;
+import badcoders.model.Film;
+import badcoders.model.FilmScore;
 
 import java.sql.*;
+import java.util.List;
 
 public class Database {
 
@@ -107,6 +110,20 @@ public class Database {
         stmt.execute();
         stmt.close();
         connection.close();
+    }
+
+    /**
+     * @retval list of all films.
+     */
+    public List<Film> getFilms() {
+        return null;
+    }
+
+    /**
+     * @retval list of all film scores.
+     */
+    public List<FilmScore> getFilmScores() {
+        return null;
     }
 
     private void createTable(Connection connection, String tableSchema) throws SQLException {
