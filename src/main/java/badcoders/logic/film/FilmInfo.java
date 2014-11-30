@@ -50,8 +50,7 @@ public class FilmInfo {
         result = name.hashCode();
         temp = Double.doubleToLongBits(score);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(numberOfVotes);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (int) (numberOfVotes ^ (numberOfVotes >>> 32));
         return result;
     }
 
