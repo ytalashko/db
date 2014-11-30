@@ -30,39 +30,6 @@ public class Film {
         this(0, name, director, actors, genre, description, 0, 0);
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDirector() {
-        return director;
-    }
-
-    public String getActors() {
-        return actors;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public double getScore() {
-        return score;
-    }
-
-    public long getNumberOfVotes() {
-        return numberOfVotes;
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

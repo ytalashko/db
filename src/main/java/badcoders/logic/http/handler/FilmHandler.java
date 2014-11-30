@@ -100,7 +100,7 @@ public class FilmHandler extends AbstractAuthHandler {
         try {
             Database db = Utils.getDatabase();
             Comment comment = db.getComment(Long.valueOf(commentId));
-            if (!account.isAdmin() && !db.getUser(comment.getUserId()).getLogin().equals(account.getLogin())) {
+            if (!account.isAdmin && !db.getUser(comment.userId).login.equals(account.login)) {
                 responder.sendString(HttpResponseStatus.METHOD_NOT_ALLOWED, "Can't delete comment of another user");
                 return;
             }

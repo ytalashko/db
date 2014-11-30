@@ -7,9 +7,9 @@ import badcoders.logic.util.Utils;
  */
 public final class Account {
 
-    private final long id;
-    private final String login;
-    private final boolean isAdmin;
+    public final long id;
+    public final String login;
+    public final boolean isAdmin;
 
     public Account(long id, String login, boolean isAdmin) {
         Utils.checkArgument(login != null, "Account must have login");
@@ -20,18 +20,6 @@ public final class Account {
 
     public Account(String login, boolean isAdmin) {
         this(0, login, isAdmin);
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
     }
 
     @Override

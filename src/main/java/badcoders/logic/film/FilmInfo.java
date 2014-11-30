@@ -15,18 +15,6 @@ public class FilmInfo {
         this.numberOfVotes = numberOfVotes;
     }
 
-    public double getScore() {
-        return score;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public long getNumberOfVotes() {
-        return numberOfVotes;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

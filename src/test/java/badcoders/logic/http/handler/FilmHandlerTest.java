@@ -10,6 +10,7 @@ import co.cask.http.HttpHandler;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
+import com.google.gson.reflect.TypeToken;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -88,7 +89,7 @@ public class FilmHandlerTest {
         HttpResponse response = doGet("/films", headers);
         Reader reader = new InputStreamReader(response.getEntity().getContent(), Charsets.UTF_8);
         List<FilmInfo> actual = Utils.getGson().fromJson(reader,
-                new com.google.gson.reflect.TypeToken<List<FilmInfo>>() { }.getType());
+                new TypeToken<List<FilmInfo>>() { }.getType());
 
         Assert.assertEquals(expected.size(), actual.size());
         for (FilmInfo filmInfo : expected) {

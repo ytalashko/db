@@ -5,9 +5,6 @@ import com.google.gson.Gson;
 
 import java.sql.SQLException;
 
-/**
- * Utils.
- */
 public class Utils {
 
     private static final Gson GSON = new Gson();

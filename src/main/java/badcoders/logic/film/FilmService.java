@@ -13,9 +13,9 @@ public class FilmService {
     public static List<FilmInfo> getFilmsInfo(List<Film> films) {
         List<FilmInfo> filmInfos = new ArrayList<>(films.size());
         for (Film film : films) {
-            filmInfos.add(new FilmInfo(film.getName(),
-                    film.getScore(),
-                    film.getNumberOfVotes()));
+            filmInfos.add(new FilmInfo(film.name,
+                    film.score,
+                    film.numberOfVotes));
         }
         return filmInfos;
     }

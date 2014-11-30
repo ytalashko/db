@@ -174,11 +174,11 @@ public class Database {
         try (Connection connection = createConnection()) {
             final String query = "INSERT INTO film(name, director, actors, genre, description) VALUES(?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, film.getName());
-                stmt.setString(2, film.getDirector());
-                stmt.setString(3, film.getActors());
-                stmt.setString(4, film.getGenre());
-                stmt.setString(5, film.getDescription());
+                stmt.setString(1, film.name);
+                stmt.setString(2, film.director);
+                stmt.setString(3, film.actors);
+                stmt.setString(4, film.genre);
+                stmt.setString(5, film.description);
                 stmt.execute();
 
                 return stmt.getGeneratedKeys().getLong(1);
@@ -217,7 +217,7 @@ public class Database {
             final String query = "INSERT INTO comment(film_id, user_id, text) VALUES (?, ? ,?);";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setLong(1, filmId);
-                stmt.setLong(2, account.getId());
+                stmt.setLong(2, account.id);
                 stmt.setString(3, text);
                 stmt.execute();
 

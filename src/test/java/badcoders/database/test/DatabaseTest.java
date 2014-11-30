@@ -62,7 +62,7 @@ public class DatabaseTest {
         assertEquals(films.size(), result.size());
 
         for (Film film : result) {
-            assertEquals(film, db.getFilm(film.getId()));
+            assertEquals(film, db.getFilm(film.id));
         }
     }
 
