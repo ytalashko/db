@@ -2,10 +2,7 @@ package badcoders.database;
 
 import badcoders.logic.account.Account;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Database {
 
@@ -54,6 +51,7 @@ public class Database {
             "password tinytext NOT NULL," +
             "email tinytext NOT NULL," +
             "date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+            "is_admin BOOL," +
             "PRIMARY KEY (id));";
 
     public static final String[] SCHEMAS = new String[]{
@@ -71,24 +69,53 @@ public class Database {
 
     public void createModel() throws SQLException {
         Connection connection = createConnection();
-        for (String schema : SCHEMAS) {
-            createTable(connection, schema);
+        try {
+            for (String schema : SCHEMAS) {
+                createTable(connection, schema);
+            }
+        } finally {
+            connection.close();
         }
-        connection.close();
     }
 
     /**
      * @retval null if given user not exists.
      */
-    public Account getUser(String name, String password) {
-        return null;
+    public Account getUser(String name, String password) throws SQLException {
+        Connection connection = createConnection();
+        final String query = "SELECT is_admin FROM user WHERE login = ? AND password = ?;";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setString(1, name);
+        stmt.setString(2, password);
+        ResultSet dbResult = stmt.executeQuery();
+        Account result = null;
+        if (!dbResult.isAfterLast()) {
+            result = new Account(name, dbResult.getBoolean("is_admin"));
+        }
+        stmt.close();
+        return result;
+    }
+
+    public void addUser(String name, String password, boolean is_admin, String email) throws SQLException {
+        Connection connection = createConnection();
+        final String query = "INSERT INTO user(login, password, is_admin, email) VALUES (?, ?, ?, ?);";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setString(1, name);
+        stmt.setString(2, password);
+        stmt.setBoolean(3, is_admin);
+        stmt.setString(4, email);
+        stmt.execute();
+        stmt.close();
+        connection.close();
     }
 
     private void createTable(Connection connection, String tableSchema) throws SQLException {
-        System.out.println("Creating schema: " + tableSchema);
         Statement stmt = connection.createStatement();
-        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS " + tableSchema);
-        stmt.close();
+        try {
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS " + tableSchema);
+        } finally {
+            stmt.close();
+        }
     }
 
     private Connection createConnection() throws SQLException {
@@ -101,6 +128,10 @@ public class Database {
     }
 
     public static void main(String[] args) throws SQLException {
-        new Database("test").createModel();
+        Database db = new Database("test");
+        db.createModel();
+        db.addUser("rasen", "secret", true, "rasen.dubi@gmail.com");
+        System.out.println(db.getUser("rasen", "secret"));
+        System.out.println(db.getUser("rasen", "hack"));
     }
 }
