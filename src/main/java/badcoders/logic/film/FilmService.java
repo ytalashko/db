@@ -15,7 +15,7 @@ public class FilmService {
         for (Film film : films) {
             filmInfos.add(new FilmInfo(film.getName(),
                     film.getScore(),
-                    films.size()));
+                    film.getNumberOfVotes()));
         }
         return filmInfos;
     }
