@@ -5,6 +5,7 @@ package badcoders.model;
  */
 public class Film {
 
+    public final long id;
     public final String name;
     public final String director;
     public final String actors;
@@ -13,8 +14,9 @@ public class Film {
     public final double score;
     public final int numberOfVotes;
 
-    public Film(String name, String director, String actors, String genre, String description,
+    public Film(long id, String name, String director, String actors, String genre, String description,
                          double score, int numberOfVotes) {
+        this.id = id;
         this.name = name;
         this.director = director;
         this.actors = actors;
@@ -22,6 +24,10 @@ public class Film {
         this.description = description;
         this.score = score;
         this.numberOfVotes = numberOfVotes;
+    }
+
+    public Film(String name, String director, String actors, String genre, String description) {
+        this(0, name, director, actors, genre, description, 0, 0);
     }
 
     public String getName() {
@@ -50,5 +56,32 @@ public class Film {
 
     public int getNumberOfVotes() {
         return numberOfVotes;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Film film = (Film) o;
+
+        if (!actors.equals(film.actors)) return false;
+        if (!description.equals(film.description)) return false;
+        if (!director.equals(film.director)) return false;
+        if (!genre.equals(film.genre)) return false;
+        if (!name.equals(film.name)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + director.hashCode();
+        result = 31 * result + actors.hashCode();
+        result = 31 * result + genre.hashCode();
+        result = 31 * result + description.hashCode();
+        return result;
     }
 }
