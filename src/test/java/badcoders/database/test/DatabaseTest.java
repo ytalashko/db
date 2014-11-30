@@ -33,10 +33,13 @@ public class DatabaseTest {
 
     @Test
     public void testUser() throws SQLException {
-        db.addUser("rasen", "secret", true, "rasen.dubi@gmail.com");
+        long rasenId = db.addUser("rasen", "secret", true, "rasen.dubi@gmail.com");
 
         assertEquals(new Account("rasen", true), db.getUser("rasen", "secret"));
         assertEquals(null, db.getUser("rasen", "hack"));
+
+        assertEquals(new Account("rasen", true), db.getUser(rasenId));
+        assertEquals(null, db.getUser(rasenId+100));
     }
 
     @Test
