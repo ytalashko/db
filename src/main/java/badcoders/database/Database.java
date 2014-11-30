@@ -1,8 +1,8 @@
 package badcoders.database;
 
 import badcoders.model.Account;
+import badcoders.model.Comment;
 import badcoders.model.Film;
-import badcoders.model.FilmScore;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -113,6 +113,13 @@ public class Database {
     }
 
     /**
+     * @return gets user by id.
+     */
+    public Account getUser(long id) {
+        return null;
+    }
+
+    /**
      * @return list of all films.
      */
     public List<Film> getFilms() throws SQLException {
@@ -154,6 +161,29 @@ public class Database {
 
     public Film getFilm(long id) {
         return null;
+    }
+
+    /**
+     * @retval adds new comment.
+     */
+    public long addComment(Account account, long filmId, String text) {
+        //TODO: implement this dude!!!
+        return 0;
+    }
+
+    /**
+     * @retval gets a comment.
+     */
+    public Comment getComment(long id) {
+        //TODO: implement this dude!!!
+        return null;
+    }
+
+    /**
+     * @retval deletes a comment.
+     */
+    public void deleteComment(long id) {
+        //TODO: implement this dude!!!
     }
 
     private void createTable(Connection connection, String tableSchema) throws SQLException {

@@ -61,18 +61,18 @@ public class Film {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Film film = (Film) o;
 
-        if (!actors.equals(film.actors)) return false;
-        if (!description.equals(film.description)) return false;
-        if (!director.equals(film.director)) return false;
-        if (!genre.equals(film.genre)) return false;
-        if (!name.equals(film.name)) return false;
+        return actors.equals(film.actors) && description.equals(film.description) &&
+                director.equals(film.director) && genre.equals(film.genre) && name.equals(film.name);
 
-        return true;
     }
 
     @Override

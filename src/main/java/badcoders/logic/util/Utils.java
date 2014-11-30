@@ -1,6 +1,7 @@
 package badcoders.logic.util;
 
 import badcoders.database.Database;
+import com.google.gson.Gson;
 
 import java.sql.SQLException;
 
@@ -8,6 +9,8 @@ import java.sql.SQLException;
  * Utils.
  */
 public class Utils {
+
+    private static final Gson GSON = new Gson();
 
     private static Database DATABASE;
 
@@ -23,6 +26,11 @@ public class Utils {
         database.createModel();
         return database;
     }
+
+    public static Gson getGson() {
+        return GSON;
+    }
+
 
     public static void checkArgument(boolean expression, String errorMessage) {
         if (!expression) {
