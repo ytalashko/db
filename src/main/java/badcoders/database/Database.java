@@ -1,6 +1,7 @@
 package badcoders.database;
 
 import badcoders.model.Account;
+import badcoders.model.Comment;
 import badcoders.model.Film;
 import badcoders.model.FilmScore;
 
@@ -113,6 +114,13 @@ public class Database {
     }
 
     /**
+     * @retval gets user by id.
+     */
+    public Account getUser(long id) {
+        return null;
+    }
+
+    /**
      * @retval list of all films.
      */
     public List<Film> getFilms() {
@@ -131,6 +139,29 @@ public class Database {
      */
     public List<FilmScore> getFilmScores() {
         return null;
+    }
+
+    /**
+     * @retval adds new comment.
+     */
+    public long addComment(Account account, long filmId, String text) {
+        //TODO: implement this dude!!!
+        return 0;
+    }
+
+    /**
+     * @retval gets a comment.
+     */
+    public Comment getComment(long id) {
+        //TODO: implement this dude!!!
+        return null;
+    }
+
+    /**
+     * @retval deletes a comment.
+     */
+    public void deleteComment(long id) {
+        //TODO: implement this dude!!!
     }
 
     private void createTable(Connection connection, String tableSchema) throws SQLException {
