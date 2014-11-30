@@ -12,10 +12,10 @@ public class Film {
     public final String genre;
     public final String description;
     public final double score;
-    public final int numberOfVotes;
+    public final long numberOfVotes;
 
     public Film(long id, String name, String director, String actors, String genre, String description,
-                         double score, int numberOfVotes) {
+                         double score, long numberOfVotes) {
         this.id = id;
         this.name = name;
         this.director = director;
@@ -58,7 +58,7 @@ public class Film {
         return score;
     }
 
-    public int getNumberOfVotes() {
+    public long getNumberOfVotes() {
         return numberOfVotes;
     }
 

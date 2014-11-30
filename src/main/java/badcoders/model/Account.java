@@ -7,13 +7,23 @@ import badcoders.logic.util.Utils;
  */
 public final class Account {
 
+    private final long id;
     private final String login;
     private final boolean isAdmin;
 
-    public Account(String login, boolean isAdmin) {
+    public Account(long id, String login, boolean isAdmin) {
         Utils.checkArgument(login != null, "Account must have login");
+        this.id = id;
         this.login = login;
         this.isAdmin = isAdmin;
+    }
+
+    public Account(String login, boolean isAdmin) {
+        this(0, login, isAdmin);
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getLogin() {
