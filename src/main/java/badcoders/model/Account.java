@@ -1,4 +1,4 @@
-package badcoders.logic.account;
+package badcoders.model;
 
 import badcoders.logic.util.Utils;
 

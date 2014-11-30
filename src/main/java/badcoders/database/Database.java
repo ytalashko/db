@@ -1,11 +1,14 @@
 package badcoders.database;
 
-import badcoders.logic.account.Account;
+import badcoders.model.Account;
+import badcoders.model.Film;
+import badcoders.model.FilmScore;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class Database {
 
@@ -81,6 +84,20 @@ public class Database {
      * @retval null if given user not exists.
      */
     public Account getUser(String name, String password) {
+        return null;
+    }
+
+    /**
+     * @retval list of all films.
+     */
+    public List<Film> getFilms() {
+        return null;
+    }
+
+    /**
+     * @retval list of all film scores.
+     */
+    public List<FilmScore> getFilmScores() {
         return null;
     }
 
