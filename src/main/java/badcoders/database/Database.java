@@ -78,7 +78,7 @@ public class Database {
      */
     public Account getUser(String name, String password) throws SQLException {
         Connection connection = createConnection();
-        final String query = "SELECT id, is_admin FROM user WHERE login = ? AND password = ?;";
+        final String query = "SELECT id, is_admin FROM user WHERE login = ? AND password = ?";
         PreparedStatement stmt = connection.prepareStatement(query);
         stmt.setString(1, name);
         stmt.setString(2, password);
@@ -93,7 +93,7 @@ public class Database {
 
     public long addUser(String name, String password, boolean is_admin, String email) throws SQLException {
         try (Connection connection = createConnection()) {
-            final String query = "INSERT INTO user(login, password, is_admin, email) VALUES (?, ?, ?, ?);";
+            final String query = "INSERT INTO user(login, password, is_admin, email) VALUES (?, ?, ?, ?)";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, name);
                 stmt.setString(2, password);
@@ -109,7 +109,7 @@ public class Database {
 
     public Account getUser(long id) throws SQLException {
         try (Connection connection = createConnection()) {
-            final String query = "SELECT * FROM user WHERE id = ?;";
+            final String query = "SELECT * FROM user WHERE id = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setLong(1, id);
 
@@ -118,14 +118,16 @@ public class Database {
                     return null;
                 }
 
-                return new Account(dbResult.getLong("id"), dbResult.getString("login"), dbResult.getBoolean("is_admin"));
+                return new Account(dbResult.getLong("id"),
+                        dbResult.getString("login"), dbResult.getBoolean("is_admin"));
             }
         }
     }
 
     public FilmStats getFilmStats(long id) throws SQLException {
         try (Connection connection = createConnection()) {
-            final String query = "SELECT AVG(score) AS mean_score, COUNT(*) AS vote_count FROM film_score WHERE film_id = ?;";
+            final String query =
+                    "SELECT AVG(score) AS mean_score, COUNT(*) AS vote_count FROM film_score WHERE film_id = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setLong(1, id);
                 ResultSet dbResult = stmt.executeQuery();
@@ -212,9 +214,38 @@ public class Database {
         }
     }
 
+    public boolean canRateFilm(Account account, long filmId) throws SQLException {
+        try (Connection connection = createConnection()) {
+            final String query = "SELECT id FROM film_score WHERE film_id = ? AND user_id = ?";
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setLong(1, filmId);
+                stmt.setLong(2, account.id);
+                ResultSet dbResult = stmt.executeQuery();
+
+                return dbResult.isAfterLast();
+            }
+        }
+    }
+
+    public void rateFilm(Account account, long filmId, int rate) throws SQLException {
+        try (Connection connection = createConnection()) {
+            final String query = "INSERT INTO film_score(film_id, user_id, score) VALUES (?, ?, ?)";
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setLong(1, filmId);
+                stmt.setLong(2, account.id);
+                stmt.setInt(3, rate);
+                stmt.execute();
+            }
+        }
+    }
+
+    public void getRecommendation(Account account) throws SQLException {
+        //TODO: retrieve recommendation!!!
+    }
+
     public long addComment(Account account, long filmId, String text) throws SQLException {
         try (Connection connection = createConnection()) {
-            final String query = "INSERT INTO comment(film_id, user_id, text) VALUES (?, ? ,?);";
+            final String query = "INSERT INTO comment(film_id, user_id, text) VALUES (?, ? ,?)";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setLong(1, filmId);
                 stmt.setLong(2, account.id);
@@ -228,7 +259,7 @@ public class Database {
 
     public Comment getComment(long id) throws SQLException {
         try (Connection connection = createConnection()) {
-            final String query = "SELECT * FROM comment WHERE id = ?;";
+            final String query = "SELECT * FROM comment WHERE id = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setLong(1, id);
                 ResultSet dbResult = stmt.executeQuery();
@@ -239,6 +270,28 @@ public class Database {
 
                 return new Comment(dbResult.getLong("id"), dbResult.getLong("user_id"),
                         dbResult.getLong("film_id"), dbResult.getString("text"));
+            }
+        }
+    }
+
+    public List<Comment> getFilmComments(long filmId) throws SQLException {
+        try (Connection connection = createConnection()) {
+            final String query = "SELECT * FROM comment WHERE film_id = ?";
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setLong(1, filmId);
+                ResultSet dbResult = stmt.executeQuery();
+
+                ArrayList<Comment> result = new ArrayList<>();
+                while (dbResult.next()) {
+                    result.add(new Comment(
+                            dbResult.getLong("id"),
+                            dbResult.getLong("user_id"),
+                            dbResult.getLong("film_id"),
+                            dbResult.getString("text")
+                    ));
+                }
+
+                return result;
             }
         }
     }

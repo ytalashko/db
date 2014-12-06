@@ -28,7 +28,7 @@ import java.util.List;
 public class FilmHandler extends AbstractAuthHandler {
 
     /**
-     * Get all clusters visible to the user.
+     * Gets all films.
      *
      * @param request Request for films.
      * @param responder Responder for sending the response.
@@ -51,6 +51,12 @@ public class FilmHandler extends AbstractAuthHandler {
         }
     }
 
+    /**
+     * Get a film by it's id.
+     *
+     * @param request Request for films.
+     * @param responder Responder for sending the response.
+     */
     @GET
     @Path("/{film-id}")
     public void getFilm(HttpRequest request, HttpResponder responder, @PathParam("film-id") long filmId) {
@@ -68,8 +74,38 @@ public class FilmHandler extends AbstractAuthHandler {
         }
     }
 
+    /**
+     * Gets film comments.
+     *
+     * @param request Request for films.
+     * @param responder Responder for sending the response.
+     */
+    @GET
+    @Path("/{film-id}/comments")
+    public void getComments(HttpRequest request, HttpResponder responder, @PathParam("film-id") String filmId) {
+        Account account = getAndAuthenticateAccount(request, responder);
+        if (account == null) {
+            return;
+        }
+
+        try {
+            Database db = Utils.getDatabase();
+            List<Comment> comments = db.getFilmComments(Long.valueOf(filmId));
+            responder.sendJson(HttpResponseStatus.OK, comments,
+                    new TypeToken<List<Comment>>() { }.getType(), Utils.getGson());
+        } catch (SQLException e) {
+            responder.sendString(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Unable to read data from the database");
+        }
+    }
+
+    /**
+     * Adds comment to film.
+     *
+     * @param request Request for films.
+     * @param responder Responder for sending the response.
+     */
     @POST
-    @Path("/{film-id}/comment")
+    @Path("/{film-id}/comments")
     public void addComment(HttpRequest request, HttpResponder responder, @PathParam("film-id") String filmId) {
         Account account = getAndAuthenticateAccount(request, responder);
         if (account == null) {
@@ -88,8 +124,14 @@ public class FilmHandler extends AbstractAuthHandler {
         }
     }
 
+    /**
+     * Deletes a comment form specified film by comment's id.
+     *
+     * @param request Request for films.
+     * @param responder Responder for sending the response.
+     */
     @DELETE
-    @Path("/{film-id}/comment/{comment-id}")
+    @Path("/{film-id}/comments/{comment-id}")
     public void deleteComment(HttpRequest request, HttpResponder responder, @PathParam("film-id") String filmId,
                               @PathParam("comment-id") String commentId) {
         Account account = getAndAuthenticateAccount(request, responder);
@@ -106,6 +148,57 @@ public class FilmHandler extends AbstractAuthHandler {
             }
             db.deleteComment(Long.valueOf(commentId));
             responder.sendStatus(HttpResponseStatus.OK);
+        } catch (SQLException e) {
+            responder.sendString(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Unable to read data from the database");
+        }
+    }
+
+    /**
+     * Rates the film.
+     *
+     * @param request Request for films.
+     * @param responder Responder for sending the response.
+     */
+    @POST
+    @Path("/{film-id}/{rating}")
+    public void rateFilm(HttpRequest request, HttpResponder responder, @PathParam("film-id") String filmId,
+                         @PathParam("rating") String rating) {
+        Account account = getAndAuthenticateAccount(request, responder);
+        if (account == null) {
+            return;
+        }
+
+        try {
+            Database db = Utils.getDatabase();
+            if (db.canRateFilm(account, Long.valueOf(filmId))) {
+                db.rateFilm(account, Long.valueOf(filmId), Integer.valueOf(rating));
+                responder.sendStatus(HttpResponseStatus.OK);
+            } else {
+                responder.sendString(HttpResponseStatus.BAD_REQUEST, "Can't rate film more than once");
+            }
+        } catch (SQLException e) {
+            responder.sendString(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Unable to read data from the database");
+        }
+    }
+
+    /**
+     * Retrieves user recommendation.
+     *
+     * @param request Request for films.
+     * @param responder Responder for sending the response.
+     */
+    @POST
+    @Path("/recommendation")
+    public void getRecommendation(HttpRequest request, HttpResponder responder) {
+        Account account = getAndAuthenticateAccount(request, responder);
+        if (account == null) {
+            return;
+        }
+
+        try {
+            Database db = Utils.getDatabase();
+            db.getRecommendation(account);
+//            responder.sendStatus(HttpResponseStatus.OK);
         } catch (SQLException e) {
             responder.sendString(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Unable to read data from the database");
         }
