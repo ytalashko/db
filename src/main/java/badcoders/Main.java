@@ -4,16 +4,12 @@ import badcoders.logic.http.HandlerServer;
 import badcoders.logic.http.handler.FileHandler;
 import badcoders.logic.http.handler.FilmHandler;
 import badcoders.logic.util.Constants;
-import badcoders.logic.util.Utils;
-import badcoders.model.Film;
 import co.cask.http.HttpHandler;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 public class Main {
