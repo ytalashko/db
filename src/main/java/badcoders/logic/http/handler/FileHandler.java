@@ -67,4 +67,28 @@ public class FileHandler extends AbstractAuthHandler {
             responder.sendString(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Internal server error occurred");
         }
     }
+
+    /**
+     * Gets a css file.
+     *
+     * @param request Request for films.
+     * @param responder Responder for sending the response.
+     */
+    @GET
+    @Path("/css/{file-name}")
+    public void getCssFile(HttpRequest request, HttpResponder responder, @PathParam("file-name") String fileName) {
+        try {
+            byte[] encoded = Files.readAllBytes(Paths.get(Constants.CSS_PARENT_PATH + fileName));
+
+            ByteBuffer b = ByteBuffer.allocate(encoded.length);
+            b.put(encoded);
+            b.position(0);
+
+            ChannelBuffer buffer = new ByteBufferBackedChannelBuffer(b);
+
+            responder.sendContent(HttpResponseStatus.OK, buffer, "text/css", null);
+        } catch (IOException e) {
+            responder.sendString(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Internal server error occurred");
+        }
+    }
 }

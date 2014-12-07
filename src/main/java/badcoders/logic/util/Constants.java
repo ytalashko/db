@@ -16,4 +16,6 @@ public class Constants {
             "/src/main/resources/badcoders/www/index.html";
     public static final String JS_PARENT_PATH = System.getProperty("user.dir") +
             "/src/main/resources/badcoders/www/js/";
+    public static final String CSS_PARENT_PATH = System.getProperty("user.dir") +
+            "/src/main/resources/badcoders/www/css/";
 }
