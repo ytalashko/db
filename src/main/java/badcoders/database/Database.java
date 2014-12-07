@@ -1,9 +1,6 @@
 package badcoders.database;
 
-import badcoders.model.Account;
-import badcoders.model.Comment;
-import badcoders.model.Film;
-import badcoders.model.FilmStats;
+import badcoders.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -239,8 +236,21 @@ public class Database {
         }
     }
 
-    public void getRecommendation(Account account) throws SQLException {
-        //TODO: retrieve recommendation!!!
+    public List<Recommendation> getRecommendation(Account account) throws SQLException {
+        try (Connection connection = createConnection()) {
+            final String query = "SELECT * FROM recommendation WHERE user_id = ?";
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setLong(1, account.id);
+                ResultSet dbResult = stmt.executeQuery();
+
+                List<Recommendation> result = new ArrayList<>();
+                while (dbResult.next()) {
+                    result.add(new Recommendation(dbResult.getLong("user_id"), dbResult.getLong("film_id"),
+                            dbResult.getDouble("score")));
+                }
+                return result;
+            }
+        }
     }
 
     public long addComment(Account account, long filmId, String text) throws SQLException {
