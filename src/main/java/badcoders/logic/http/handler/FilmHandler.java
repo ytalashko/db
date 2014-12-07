@@ -8,6 +8,7 @@ import badcoders.logic.util.Utils;
 import badcoders.model.Account;
 import badcoders.model.Comment;
 import badcoders.model.Film;
+import badcoders.model.Recommendation;
 import co.cask.http.HttpResponder;
 import com.google.common.base.Charsets;
 import com.google.gson.reflect.TypeToken;
@@ -192,8 +193,9 @@ public class FilmHandler extends AbstractAuthHandler {
 
         try {
             Database db = Utils.getDatabase();
-            db.getRecommendation(account);
-//            responder.sendStatus(HttpResponseStatus.OK);
+            List<Recommendation> recommendations = db.getRecommendation(account);
+            responder.sendJson(HttpResponseStatus.OK, recommendations,
+                    new TypeToken<List<Recommendation>>() { }.getType(), Utils.getGson());
         } catch (SQLException e) {
             responder.sendString(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Unable to read data from the database");
         }
