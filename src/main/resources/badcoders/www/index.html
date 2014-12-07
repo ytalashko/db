@@ -1,0 +1,16 @@
+<!doctype html>
+<html ng-app="badApp">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+    <script src="js/bad.js"></script>
+</head>
+<body ng-controller="BadCtrl">
+<span>Hello, world!</span>
+<ul>
+    <li ng-repeat="film in films">
+        <span>{{film.name}}</span>
+        <p>{{film.score}}</p>
+    </li>
+</ul>
+</body>
+</html>

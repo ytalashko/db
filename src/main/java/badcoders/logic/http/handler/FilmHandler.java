@@ -35,11 +35,6 @@ public class FilmHandler extends AbstractAuthHandler {
      */
     @GET
     public void getFilms(HttpRequest request, HttpResponder responder) {
-        Account account = getAndAuthenticateAccount(request, responder);
-        if (account == null) {
-            return;
-        }
-
         try {
             Database db = Utils.getDatabase();
             List<Film> films = db.getFilms();
