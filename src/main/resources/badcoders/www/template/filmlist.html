@@ -1,0 +1,16 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>name</th>
+            <th>score</th>
+            <th>Number of Votes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="film in films" ng-click="go(film.id);">
+            <td>{{film.name}}</td>
+            <td>{{film.score}}</td>
+            <td>{{film.numberOfVotes}}</td>
+        </tr>
+    </tbody>
+</table>

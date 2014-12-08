@@ -44,6 +44,24 @@ public class FileHandler extends AbstractAuthHandler {
         }
     }
 
+    @GET
+    @Path("/template/{template-name}")
+    public void getTemplate(HttpRequest request, HttpResponder responder, @PathParam("template-name") String templateName) {
+        try {
+            byte[] encoded = Files.readAllBytes(Paths.get(Constants.TEMPLATE_PATH + templateName));
+
+            ByteBuffer b = ByteBuffer.allocate(encoded.length);
+            b.put(encoded);
+            b.position(0);
+
+            ChannelBuffer buffer = new ByteBufferBackedChannelBuffer(b);
+
+            responder.sendContent(HttpResponseStatus.OK, buffer, "text/html", null);
+        } catch (IOException e) {
+            responder.sendString(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Internal server error occurred");
+        }
+    }
+
     /**
      * Gets a js file.
      *

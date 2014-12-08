@@ -5,11 +5,13 @@ package badcoders.logic.film;
  */
 public class FilmInfo {
 
+    public final long id;
     public final String name;
     public final double score;
     public final long numberOfVotes;
 
-    public FilmInfo(String name, double score, long numberOfVotes) {
+    public FilmInfo(long id, String name, double score, long numberOfVotes) {
+        this.id = id;
         this.name = name;
         this.score = score;
         this.numberOfVotes = numberOfVotes;
@@ -45,7 +47,8 @@ public class FilmInfo {
     @Override
     public String toString() {
         return "FilmInfo{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", score=" + score +
                 ", numberOfVotes=" + numberOfVotes +
                 '}';

@@ -56,11 +56,6 @@ public class FilmHandler extends AbstractAuthHandler {
     @GET
     @Path("/{film-id}")
     public void getFilm(HttpRequest request, HttpResponder responder, @PathParam("film-id") long filmId) {
-        Account account = getAndAuthenticateAccount(request, responder);
-        if (account == null) {
-            return;
-        }
-
         try {
             Database db = Utils.getDatabase();
             Film film = db.getFilm(filmId);
