@@ -79,8 +79,8 @@ public class FilmHandlerTest {
         films.add(new Film("filmetz", "-", "no", "horror", "null"));
 
         List<FilmInfo> expected = new ArrayList<>();
-        expected.add(new FilmInfo(1, "Loha trall!", 0, 0));
-        expected.add(new FilmInfo(2, "filmetz", 0, 0));
+        expected.add(new FilmInfo(1, "Loha trall!", 0, 0, "No description"));
+        expected.add(new FilmInfo(2, "filmetz", 0, 0, "Bad description"));
 
         for (Film film : films) {
             DATABASE.addFilm(film);

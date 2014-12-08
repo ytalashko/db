@@ -9,12 +9,14 @@ public class FilmInfo {
     public final String name;
     public final double score;
     public final long numberOfVotes;
+    public final String description;
 
-    public FilmInfo(long id, String name, double score, long numberOfVotes) {
+    public FilmInfo(long id, String name, double score, long numberOfVotes, String description) {
         this.id = id;
         this.name = name;
         this.score = score;
         this.numberOfVotes = numberOfVotes;
+        this.description = description;
     }
 
     @Override

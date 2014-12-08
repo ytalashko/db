@@ -1,8 +1,13 @@
 <div class="bg-info img-rounded">
-    <p class="lead"><span class="name">{{film.name}}</span></p>
-    <p class="bg-info">director: <span class="director">{{film.director}}</span></p>
-    <p class="bg-info">actors: <span class="actors">{{film.actors}}</span></p>
-    <p class="bg-info">genre: <span class="genre">{{film.genre}}</span></p>
-    <p class="bg-info">description: <span class="description">{{film.description}}</span></p>
-    <button ng-click="back();" class="btn btn-primary">Back</button>
+    <div class="film-block thumbnail col-md-8 col-md-offset-4">
+        <p class="lead">
+            <span class="name">{{film.name}}</span>
+            <span class="badge genre">{{film.genre}}</span>
+        </p>
+        <p class="text-right">Score: {{film.score}} ({{film.numberOfVotes}} votes)</p>
+        <p>director: <span class="director">{{film.director}}</span></p>
+        <p>actors: <span class="actors">{{film.actors}}</span></p>
+        <p class="description">{{film.description}}</p>
+        <button ng-click="back();" class="btn btn-primary">Back</button>
+    </div>
 </div>

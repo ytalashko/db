@@ -17,7 +17,8 @@ public class FilmService {
                     film.id,
                     film.name,
                     film.score,
-                    film.numberOfVotes));
+                    film.numberOfVotes,
+                    film.description));
         }
         return filmInfos;
     }
